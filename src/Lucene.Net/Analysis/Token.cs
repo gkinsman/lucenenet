@@ -116,7 +116,7 @@ namespace Lucene.Net.Analysis
     /// this method now only prints the term text, no additional information anymore.
     /// </para>
     /// </summary>
-    public class Token : CharTermAttribute, ITypeAttribute, IPositionIncrementAttribute, IFlagsAttribute, IOffsetAttribute, IPayloadAttribute, IPositionLengthAttribute
+    public class Token : CharTermAttribute, ITypeAttribute, IPositionIncrementAttribute, IFlagsAttribute, IOffsetAttribute, IPayloadAttribute, IPositionLengthAttribute, ITermFrequencyAttribute
     {
         private int startOffset, endOffset;
         private string type = TypeAttribute.DEFAULT_TYPE;
@@ -353,6 +353,13 @@ namespace Lucene.Net.Analysis
                 this.flags = value;
             }
         }
+
+        /// <summary>
+        /// Gets or Sets this <see cref="Token"/> term frequency.
+        /// </summary>
+        /// <seealso cref="ITermFrequencyAttribute"/>
+        public int TermFrequency { get; set; }
+
 
         /// <summary>
         /// Gets or Sets this <see cref="Token"/>'s payload.
@@ -650,6 +657,7 @@ namespace Lucene.Net.Analysis
             reflector.Reflect(typeof(IOffsetAttribute), "startOffset", startOffset);
             reflector.Reflect(typeof(IOffsetAttribute), "endOffset", endOffset);
             reflector.Reflect(typeof(IPositionIncrementAttribute), "positionIncrement", positionIncrement);
+            reflector.Reflect(typeof(ITermFrequencyAttribute), "termFrequency", TermFrequency);
             reflector.Reflect(typeof(IPayloadAttribute), "payload", payload);
             reflector.Reflect(typeof(IFlagsAttribute), "flags", flags);
             reflector.Reflect(typeof(ITypeAttribute), "type", type);
@@ -715,5 +723,6 @@ namespace Lucene.Net.Analysis
                 return @delegate.GetHashCode() ^ 0x0a45aa31;
             }
         }
+
     }
 }

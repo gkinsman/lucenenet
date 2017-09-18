@@ -115,6 +115,7 @@ namespace Lucene.Net.Index
 
                         IOffsetAttribute offsetAttribute = fieldState.AttributeSource.AddAttribute<IOffsetAttribute>();
                         IPositionIncrementAttribute posIncrAttribute = fieldState.AttributeSource.AddAttribute<IPositionIncrementAttribute>();
+                        ITermFrequencyAttribute termFreqAttribuute = fieldState.AttributeSource.AddAttribute<ITermFrequencyAttribute>();
 
                         if (hasMoreTokens)
                         {
@@ -174,6 +175,9 @@ namespace Lucene.Net.Index
                                     lastStartOffset = startOffset;
                                 }
 
+                                fieldState.Length = fieldState.Length + termFreqAttribuute.TermFrequency;
+
+
                                 bool success = false;
                                 try
                                 {
@@ -193,7 +197,6 @@ namespace Lucene.Net.Index
                                         docState.docWriter.SetAborting();
                                     }
                                 }
-                                fieldState.Length++;
                                 fieldState.Position++;
                             } while (stream.IncrementToken());
                         }

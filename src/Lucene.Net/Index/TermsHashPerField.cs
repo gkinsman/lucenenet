@@ -40,6 +40,7 @@ namespace Lucene.Net.Index
         internal readonly TermsHashPerField nextPerField;
         internal readonly DocumentsWriterPerThread.DocState docState;
         internal readonly FieldInvertState fieldState;
+        internal ITermFrequencyAttribute termFreqAtt;
         internal ITermToBytesRefAttribute termAtt;
         internal BytesRef termBytesRef;
 
@@ -132,6 +133,7 @@ namespace Lucene.Net.Index
         internal override void Start(IIndexableField f)
         {
             termAtt = fieldState.AttributeSource.GetAttribute<ITermToBytesRefAttribute>();
+            termFreqAtt = fieldState.AttributeSource.GetAttribute<ITermFrequencyAttribute>();
             termBytesRef = termAtt.BytesRef;
             consumer.Start(f);
             if (nextPerField != null)

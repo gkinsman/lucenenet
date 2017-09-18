@@ -137,7 +137,7 @@ namespace Lucene.Net.Index
             {
                 payloadAttribute = fieldState.AttributeSource.GetAttribute<IPayloadAttribute>();
             }
-            else
+            else 
             {
                 payloadAttribute = null;
             }
@@ -205,11 +205,12 @@ namespace Lucene.Net.Index
             if (!hasFreq)
             {
                 postings.lastDocCodes[termID] = docState.docID;
+                fieldState.MaxTermFrequency = Math.Max(1, fieldState.MaxTermFrequency);
             }
             else
             {
                 postings.lastDocCodes[termID] = docState.docID << 1;
-                postings.termFreqs[termID] = 1;
+                postings.termFreqs[termID] = getTermFrequency();
                 if (hasProx)
                 {
                     WriteProx(termID, fieldState.Position);
@@ -222,9 +223,15 @@ namespace Lucene.Net.Index
                 {
                     Debug.Assert(!hasOffsets);
                 }
+                fieldState.MaxTermFrequency = Math.Max(postings.termFreqs[termID], fieldState.MaxTermFrequency);
             }
             fieldState.MaxTermFrequency = Math.Max(1, fieldState.MaxTermFrequency);
             fieldState.UniqueTermCount++;
+        }
+
+        private int getTermFrequency()
+        {
+            return termsHashPerField.termFreqAtt.TermFrequency;
         }
 
         internal override void AddTerm(int termID)
@@ -264,8 +271,8 @@ namespace Lucene.Net.Index
                     termsHashPerField.WriteVInt32(0, postings.lastDocCodes[termID]);
                     termsHashPerField.WriteVInt32(0, postings.termFreqs[termID]);
                 }
-                postings.termFreqs[termID] = 1;
-                fieldState.MaxTermFrequency = Math.Max(1, fieldState.MaxTermFrequency);
+                postings.termFreqs[termID] = getTermFrequency();
+                fieldState.MaxTermFrequency = Math.Max(postings.termFreqs[termID], fieldState.MaxTermFrequency);
                 postings.lastDocCodes[termID] = (docState.docID - postings.lastDocIDs[termID]) << 1;
                 postings.lastDocIDs[termID] = docState.docID;
                 if (hasProx)
@@ -285,7 +292,8 @@ namespace Lucene.Net.Index
             }
             else
             {
-                fieldState.MaxTermFrequency = Math.Max(fieldState.MaxTermFrequency, ++postings.termFreqs[termID]);
+                postings.termFreqs[termID] = postings.termFreqs[termID] + getTermFrequency();
+                fieldState.MaxTermFrequency = Math.Max(fieldState.MaxTermFrequency, postings.termFreqs[termID]);
                 if (hasProx)
                 {
                     WriteProx(termID, fieldState.Position - postings.lastPositions[termID]);

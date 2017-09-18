@@ -272,11 +272,14 @@ namespace Lucene.Net.Analysis
         public virtual void TestAttributeReflection()
         {
             Token t = new Token("foobar", 6, 22, 8);
+            t.TermFrequency = 42;
+
             TestUtil.AssertAttributeReflection(t, new Dictionary<string, object>()
             {
                 { typeof(ICharTermAttribute).Name + "#term", "foobar" },
                 { typeof(ITermToBytesRefAttribute).Name + "#bytes", new BytesRef("foobar") },
                 { typeof(IOffsetAttribute).Name + "#startOffset", 6 },
+                { typeof(ITermFrequencyAttribute).Name + "#termFrequency", 42 },
                 { typeof(IOffsetAttribute).Name + "#endOffset", 22 },
                 { typeof(IPositionIncrementAttribute).Name + "#positionIncrement", 1 },
                 { typeof(IPayloadAttribute).Name + "#payload", null },

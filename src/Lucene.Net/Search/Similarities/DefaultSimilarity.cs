@@ -109,7 +109,7 @@ namespace Lucene.Net.Search.Similarities
         /// Implemented as
         /// <c>state.Boost * LengthNorm(numTerms)</c>, where
         /// <c>numTerms</c> is <see cref="FieldInvertState.Length"/> if 
-        /// <see cref="DiscountOverlaps"/> is <c>false</c>, else it's 
+        /// <see cref="DiscountOverlaps"/> is <c>false</c>, else it's   
         /// <see cref="FieldInvertState.Length"/> - 
         /// <see cref="FieldInvertState.NumOverlap"/>.
         ///

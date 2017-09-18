@@ -304,7 +304,7 @@ namespace Lucene.Net.Index
             Debug.Assert(docState.TestPoint("TermVectorsTermsWriterPerField.newTerm start"));
             TermVectorsPostingsArray postings = (TermVectorsPostingsArray)termsHashPerField.postingsArray;
 
-            postings.freqs[termID] = 1;
+            postings.freqs[termID] = GetTermFrequency();
             postings.lastOffsets[termID] = 0;
             postings.lastPositions[termID] = 0;
 
@@ -316,9 +316,14 @@ namespace Lucene.Net.Index
             Debug.Assert(docState.TestPoint("TermVectorsTermsWriterPerField.addTerm start"));
             TermVectorsPostingsArray postings = (TermVectorsPostingsArray)termsHashPerField.postingsArray;
 
-            postings.freqs[termID]++;
+            postings.freqs[termID] += GetTermFrequency();
 
             WriteProx(postings, termID);
+        }
+
+        private int GetTermFrequency()
+        {
+            return termsHashPerField.termFreqAtt.TermFrequency;
         }
 
         [ExceptionToNetNumericConvention]
