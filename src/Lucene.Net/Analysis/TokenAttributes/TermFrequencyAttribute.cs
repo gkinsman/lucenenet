@@ -4,6 +4,11 @@ namespace Lucene.Net.Analysis.TokenAttributes
 {
     public class TermFrequencyAttribute : Attribute, ITermFrequencyAttribute
     {
+        public TermFrequencyAttribute()
+        {
+            TermFrequency = 1;
+        }
+
         public TermFrequencyAttribute(int termFrequency)
         {
             TermFrequency = termFrequency;
